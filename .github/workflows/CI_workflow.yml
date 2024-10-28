@@ -2,7 +2,7 @@ name: CI Workflow
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
     paths:
       - 'app.py'
       - 'model_creation.py'
