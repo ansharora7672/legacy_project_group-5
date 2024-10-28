@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classifier</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin: 20px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        h2 {
+            color: #4caf50;
+            margin-top: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Classifier</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".png, .jpg, .jpeg">
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if result %}
+    <h2>Result: {{ result }}</h2>
+    <img src="{{ image_path }}" alt="Uploaded Image">
+    {% endif %}
+</body>
+</html>
