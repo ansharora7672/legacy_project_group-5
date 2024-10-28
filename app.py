@@ -11,8 +11,8 @@ app = Flask(__name__)
 model = load_model('model/image_classifier.keras')
 
 # Class names for CIFAR-10
-class_names = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-
+class_names = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']  
+#changes made to this file to trigger pre commit.
 
 def preprocess_image(img_path):
     img = cv.imread(img_path)
