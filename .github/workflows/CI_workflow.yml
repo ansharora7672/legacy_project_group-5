@@ -30,3 +30,6 @@ jobs:
       - name: Lint with pylint
         run: |
           python lint.py
+
+      - uses: pre-commit-ci/lite-action@v1.1.0
+        if: always()
