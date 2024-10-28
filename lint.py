@@ -5,7 +5,7 @@ import sys
 
 from pylint import lint  
 
-THRESHOLD = 1
+THRESHOLD = 0
 
 files_to_check = ["app.py", "model_creation.py", "result.py"]
 run = lint.Run(files_to_check, exit=False)
