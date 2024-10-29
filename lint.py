@@ -1,6 +1,7 @@
 #lint.py 
 #change to trigger workflow action # again for mainbrnach again
 #changes the threshold value to 1 to passs the lint
+#TEST FOR PRE COMMIT
 import sys 
 
 from pylint import lint  
