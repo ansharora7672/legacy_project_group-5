@@ -1,0 +1,10 @@
+pylint
+pytest
+numpy
+opencv-python
+matplotlib
+tensorflow
+flask
+keras
+coverage
+pytest-cov

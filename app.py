@@ -13,7 +13,7 @@ model = load_model('model/image_classifier.keras')
 # Class names for CIFAR-10
 class_names = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']  
 #changes made to this file to trigger pre commit.
-
+# adding this comment to test the newly added workflow (run_test.yml) #test 3
 def preprocess_image(img_path):
     img = cv.imread(img_path)
     img = cv.resize(img, (32, 32))
