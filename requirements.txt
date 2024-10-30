@@ -6,3 +6,5 @@ matplotlib
 tensorflow
 flask
 keras
+coverage
+pytest-cov
