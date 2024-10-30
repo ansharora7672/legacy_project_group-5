@@ -2,7 +2,7 @@ name: CI Workflow
 
 on:
   push:
-    branches: [ pre-commit-test ]
+    branches: [ pre-commit-test, main ]
     paths:
       - 'app.py'
       - 'model_creation.py'
