@@ -2,7 +2,7 @@ name: Run Unit Test via Pytest
   
 on:
     push:
-      branches: [ test-branch-2 ]
+      branches: [ test-branch-2, main, pre-commit-test, test-branch, dev ]
 
 
 jobs:  
