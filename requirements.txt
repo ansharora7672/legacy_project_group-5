@@ -1,0 +1,8 @@
+pylint
+pytest
+numpy
+opencv-python
+matplotlib
+tensorflow
+flask
+keras
