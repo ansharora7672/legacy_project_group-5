@@ -22,7 +22,7 @@ def preprocess_image(img_path):
     img = img[None, :]
     return img
 
-#change to trigger testing workflow
+#change to trigger testing workflow #2
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
