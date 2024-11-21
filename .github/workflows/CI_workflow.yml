@@ -55,7 +55,12 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
       - name: Unit Testing with pytest  
         run: |  
-          pytest test/unit
+          pytest test/unit --junitxml=unit_test_report.xml
+      - name: Unit Test Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit_test_report
+          path: unit_test_report.xml
 
   happy_and_sad_path_tests:  
     needs: unit_test
@@ -76,7 +81,12 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
       - name: Happy and sad path Testing with pytest  
         run: |  
-          pytest test/happy_sad_path_tests
+          pytest test/happy_sad_path_tests --junitxml=happy_sad_path_test_report.xml
+      - name: Happy and Sad Path Test Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: happy_sad_path_test_report
+          path: happy_sad_path_test_report.xml
 
   acceptance_tests:  
     needs: happy_and_sad_path_tests
@@ -97,4 +107,9 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
       - name: Acceptance Testing with pytest  
         run: |  
-          pytest test/acceptance_tests
+          pytest test/acceptance_tests --junitxml=acceptance_test_report.xml
+      - name: Acceptance Test Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: acceptance_test_report
+          path: acceptance_test_report.xml
