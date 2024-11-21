@@ -3,7 +3,7 @@ name: Run Unit Test via Pytest
   
 on:
     push:
-      branches: [ test-branch-2, main, pre-commit-test, test-branch, dev, testing_worflow ]
+      branches: [ test-branch-2, main, pre-commit-test, test-branch, dev, testing_workflow ]
       paths:
       - 'app.py'
       - 'model_creation.py'
