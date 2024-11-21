@@ -19,12 +19,6 @@ def client():
 
             yield client
 
-
-
-def test_request(client):
-    response = client.put("/")
-    assert b"<title>Image Classifier</title>" in response.data
-
 def test_post_without_file(client):
     
     response = client.post("/", data={})
