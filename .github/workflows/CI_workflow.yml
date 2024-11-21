@@ -1,16 +1,20 @@
-name: CI Workflow
 
+name: Run Unit Test via Pytest  
+  
 on:
-  push:
-    branches: [ pre-commit-test, main, dev, test-branch, test-branch-2,  ]
-    paths:
+    push:
+      branches: [ test-branch-2, main, pre-commit-test, test-branch, dev, testing_worflow ]
+      paths:
       - 'app.py'
       - 'model_creation.py'
       - 'result.py'
       - 'lint.py'
+      - 'test/unit/*'
+      - 'test/acceptance_tests/*'
+      - 'test/happy_sad_path_tests/*'
 
-jobs:
-  build:
+jobs:  
+  precommit_and_pylint:  
     runs-on: ubuntu-latest
 
     steps:
@@ -26,10 +30,71 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pylint
-
       - name: Lint with pylint
         run: |
           python lint.py
-
       - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()
+
+  unit_test:  
+    needs: precommit_and_pylint
+    runs-on: ubuntu-latest  
+    strategy:  
+      matrix:  
+        python-version: ["3.10"]  
+  
+    steps:  
+      - uses: actions/checkout@v3  
+      - name: Set up Python ${{ matrix.python-version }}  
+        uses: actions/setup-python@v4  
+        with:  
+          python-version: ${{ matrix.python-version }}  
+      - name: Install dependencies  
+        run: |  
+          python -m pip install --upgrade pip  
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
+      - name: Unit Testing with pytest  
+        run: |  
+          pytest test/unit
+
+  happy_and_sad_path_tests:  
+    needs: unit_test
+    runs-on: ubuntu-latest  
+    strategy:  
+      matrix:  
+        python-version: ["3.10"]  
+  
+    steps:  
+      - uses: actions/checkout@v3  
+      - name: Set up Python ${{ matrix.python-version }}  
+        uses: actions/setup-python@v4  
+        with:  
+          python-version: ${{ matrix.python-version }}  
+      - name: Install dependencies  
+        run: |  
+          python -m pip install --upgrade pip  
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
+      - name: Happy and sad path Testing with pytest  
+        run: |  
+          pytest test/happy_sad_path_tests
+
+  acceptance_tests:  
+    needs: happy_and_sad_path_tests
+    runs-on: ubuntu-latest  
+    strategy:  
+      matrix:  
+        python-version: ["3.10"]  
+  
+    steps:  
+      - uses: actions/checkout@v3  
+      - name: Set up Python ${{ matrix.python-version }}  
+        uses: actions/setup-python@v4  
+        with:  
+          python-version: ${{ matrix.python-version }}  
+      - name: Install dependencies  
+        run: |  
+          python -m pip install --upgrade pip  
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
+      - name: Acceptance Testing with pytest  
+        run: |  
+          pytest test/acceptance_tests
