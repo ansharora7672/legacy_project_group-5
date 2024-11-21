@@ -1,7 +1,9 @@
 import os
+import sys
 import shutil
 import pytest
 from PIL import Image
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from app import app
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
