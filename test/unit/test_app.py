@@ -26,7 +26,7 @@ def client():
 
 def test_request(client):
     response = client.get("/")
-    assert b"<title>Rwqeroifqwioefjweqf</title>" in response.data
+    assert b"<title>Image Classifier</title>" in response.data
 
 
 
