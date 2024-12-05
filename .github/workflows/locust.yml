@@ -10,7 +10,7 @@ on:
       - 'lint.py'
       - 'locustfile.py'
 
-# Added locust workflow ###
+### Added locust workflow ###
 jobs:
   load-test:
     runs-on: ubuntu-latest  # Use a Linux environment to run the test
