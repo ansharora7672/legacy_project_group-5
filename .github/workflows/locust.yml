@@ -3,6 +3,12 @@ name: Locust Load Testing
 on:
   push:
     branches: [ pre-commit-test, main, dev, test-branch, test-branch-2,test-branch-3]
+    paths:
+      - 'app.py'
+      - 'model_creation.py'
+      - 'result.py'
+      - 'lint.py'
+      - 'locustfile.py'
 
 # Added locust workflow
 jobs:
