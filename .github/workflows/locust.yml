@@ -1,0 +1,27 @@
+name: Locust Load Testing
+
+on:
+  push:
+    branches:
+      - main  # Trigger this workflow on push to the main branch
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest  # Use a Linux environment to run the test
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3  # Checkout the repository code
+
+      - name: Set Up Python
+        uses: actions/setup-python@v3  # Set up Python environment
+        with:
+          python-version: '3.9'  # Specify Python version
+
+      - name: Install Dependencies
+        run: |
+          pip install locust  # Install Locust for load testing
+
+      - name: Run Locust
+        run: |
+          locust -f locustfile.py --headless -u 10 -r 1 -t 5m  # Run the Locust test
