@@ -3,8 +3,8 @@ name: Locust Load Testing
 on:
   push:
     branches: [ pre-commit-test, main, dev, test-branch, test-branch-2,test-branch-3]
-      - main  # Trigger this workflow on push to the main branch
 
+# Added locust workflow
 jobs:
   load-test:
     runs-on: ubuntu-latest  # Use a Linux environment to run the test
