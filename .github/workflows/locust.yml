@@ -30,4 +30,4 @@ jobs:
 
       - name: Run Locust
         run: |
-          locust -f locustfile.py --headless -u 10 -r 1 -t 5m  # Run the Locust test
+          locust -f test/unit/locustfile.py --headless -u 10 -r 1 -t 5m  # Run the Locust test
