@@ -3,7 +3,7 @@ import io
 from PIL import Image
 import numpy as np
 
-######
+# Define a Locust user class
 
 class UserBehavior(HttpUser):
     wait_time = between(1, 3)  # Time between user actions (1 to 3 seconds)
