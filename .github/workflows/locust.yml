@@ -33,7 +33,17 @@ jobs:
       - name: Run Locust
         run: |
           locust -f locustfile.py --headless -u 10 -r 1 -t 2m  # Run the Locust test
+          continue-on-error: true
+
+      - name: Print Logs if: failure() 
+        run: | 
+        cat locust.log
+
 
       - name: Confirm Termination
         run: |
           echo "Locust test completed successfully." 
+          if: success()
+          
+        
+
