@@ -2,15 +2,19 @@ name: CI Workflow
 
 on:
   push:
-    branches: [ pre-commit-test, main, dev, test-branch, test-branch-2, test-branch-3  ]
+    branches: [ pre-commit-test, main, dev, test-branch, test-branch-2, test-branch-3 ]
     paths:
       - 'app.py'
       - 'model_creation.py'
       - 'result.py'
       - 'lint.py'
+      - 'test/unit/*'
+      - 'test/acceptance_tests/*'
+      - 'test/happy_sad_path_tests/*'
+      - 'locustfile.py'
 
-jobs:
-  build:
+jobs:  
+  precommit_and_pylint:  
     runs-on: ubuntu-latest
 
     steps:
@@ -33,3 +37,116 @@ jobs:
 
       - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()
+
+  unit_test:  
+    needs: precommit_and_pylint
+    runs-on: ubuntu-latest  
+    strategy:  
+      matrix:  
+        python-version: ["3.10"]  
+  
+    steps:  
+      - uses: actions/checkout@v3  
+      - name: Set up Python ${{ matrix.python-version }}  
+        uses: actions/setup-python@v4  
+        with:  
+          python-version: ${{ matrix.python-version }}  
+      - name: Install dependencies  
+        run: |  
+          python -m pip install --upgrade pip  
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
+      - name: Unit Testing with pytest  
+        run: |  
+          pytest test/unit --junitxml=unit_test_report.xml
+
+      - name: Unit Test Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit_test_report
+          path: unit_test_report.xml
+
+  happy_and_sad_path_tests:  
+    needs: unit_test
+    runs-on: ubuntu-latest  
+    strategy:  
+      matrix:  
+        python-version: ["3.10"]  
+  
+    steps:  
+      - uses: actions/checkout@v3  
+      - name: Set up Python ${{ matrix.python-version }}  
+        uses: actions/setup-python@v4  
+        with:  
+          python-version: ${{ matrix.python-version }}  
+      - name: Install dependencies  
+        run: |  
+          python -m pip install --upgrade pip  
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
+      - name: Happy and sad path Testing with pytest  
+        run: |  
+          pytest test/happy_sad_path_tests --junitxml=happy_sad_path_test_report.xml
+      - name: Happy and Sad Path Test Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: happy_sad_path_test_report
+          path: happy_sad_path_test_report.xml
+
+  acceptance_tests:  
+    needs: happy_and_sad_path_tests
+    runs-on: ubuntu-latest  
+    strategy:  
+      matrix:  
+        python-version: ["3.10"]  
+  
+    steps:  
+      - uses: actions/checkout@v3  
+      - name: Set up Python ${{ matrix.python-version }}  
+        uses: actions/setup-python@v4  
+        with:  
+          python-version: ${{ matrix.python-version }}  
+      - name: Install dependencies  
+        run: |  
+          python -m pip install --upgrade pip  
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi  
+      - name: Acceptance Testing with pytest  
+        run: |  
+          pytest test/acceptance_tests --junitxml=acceptance_test_report.xml
+      - name: Acceptance Test Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: acceptance_test_report
+          path: acceptance_test_report.xml
+
+  load_test:  
+    needs: acceptance_tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install locust
+          pip install Pillow
+          pip install numpy
+
+      - name: Run Locust
+        run: |
+          timeout 5m locust -f test/unit/locustfile.py --headless -u 10 -r 1 -t 5m
+        continue-on-error: true
+
+      - name: Print Logs
+        if: failure()
+        run: |
+          cat locust.log
+
+      - name: Confirm Termination
+        run: |
+          echo "Locust test completed successfully."
+        if: success()
