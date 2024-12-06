@@ -28,6 +28,7 @@ jobs:
         run: |
           pip install locust  # Install Locust for load testing
           pip install Pillow 
+          pip install numpy # Install numpy for numerical operations
 
       - name: Run Locust
         run: |
