@@ -11,7 +11,7 @@ on:
       - 'test/unit/*'
       - 'test/acceptance_tests/*'
       - 'test/happy_sad_path_tests/*'
-      - 'locustfile.py'
+      - 'test/capacity_tests.py/*'
 
 jobs:  
   precommit_and_pylint:  
@@ -117,7 +117,7 @@ jobs:
           name: acceptance_test_report
           path: acceptance_test_report.xml
 
-  load_test:  
+  capacity_test:  
     needs: acceptance_tests
     runs-on: ubuntu-latest
 
@@ -138,7 +138,7 @@ jobs:
 
       - name: Run Locust
         run: |
-          timeout 5m locust -f test/unit/locustfile.py --headless -u 10 -r 1 -t 5m
+          locust -f test/capacity_tests/test_app.py --headless -u 10 -r 1 -t 1m
         continue-on-error: true
 
       - name: Print Logs
