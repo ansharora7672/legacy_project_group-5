@@ -27,6 +27,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install locust  # Install Locust for load testing
+          pip install Pillow # Install Pillow for image processing
 
       - name: Run Locust
         run: |
