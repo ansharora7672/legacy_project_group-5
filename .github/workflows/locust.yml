@@ -2,7 +2,7 @@ name: Locust Load Testing
 
 on:
   push:
-    branches: [ pre-commit-test, main, dev, test-branch, test-branch-2,test-branch-3]
+    branches: [ pre-commit-test, main, dev, test-branch, test-branch-2, test-branch-3]
     paths:
       - 'app.py'
       - 'model_creation.py'
@@ -10,40 +10,36 @@ on:
       - 'lint.py'
       - 'locustfile.py'
 
-### Added locust workflow ###
 jobs:
   load-test:
-    runs-on: ubuntu-latest  # Use a Linux environment to run the test
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3  # Checkout the repository code
+        uses: actions/checkout@v3
 
       - name: Set Up Python
-        uses: actions/setup-python@v3  # Set up Python environment
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.9'  # Specify Python version
+          python-version: '3.9'
 
       - name: Install Dependencies
         run: |
-          pip install locust  # Install Locust for load testing
-          pip install Pillow 
-          pip install numpy # Install numpy for numerical operations
+          pip install locust
+          pip install Pillow
+          pip install numpy
 
       - name: Run Locust
         run: |
-          locust -f locustfile.py --headless -u 10 -r 1 -t 2m  # Run the Locust test
-          continue-on-error: true
+          locust -f locustfile.py --headless -u 10 -r 1 -t 1m
+        continue-on-error: true
 
-      - name: Print Logs if: failure() 
-        run: | 
-        cat locust.log
-
+      - name: Print Logs
+        if: failure()
+        run: |
+          cat locust.log
 
       - name: Confirm Termination
         run: |
-          echo "Locust test completed successfully." 
-          if: success()
-          
-        
-
+          echo "Locust test completed successfully."
+        if: success()
